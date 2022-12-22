@@ -79,5 +79,13 @@ AUTOMATISER LE DEPLOIEMENT D'UN SERVEUR MQTT
 			Ces messages sont réexpédiés (en fonction du niveau de QoS correspondant) 
 			dès que le client se sera reconnecté.
 			
+
+
+  2. Création des intances Scaleway
+	
+  3. Installation de Docker
+	
+  4. Montage du contenaire Mqtt
+			
 			
 
