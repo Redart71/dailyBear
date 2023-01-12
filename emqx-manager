@@ -1,0 +1,109 @@
+#!/bin/bash
+
+
+rm "teamname.txt"
+
+instances_name(){
+
+OUTPUT="teamname.txt"
+
+
+# create empty file
+>$OUTPUT
+
+# show an inputbox
+dialog --title "Starting EMQX Manager" \
+--backtitle "Initialization EMQX Manager" \
+--inputbox "Enter instances' name " 8 60 2>$OUTPUT
+
+# get respose
+respose=$?
+
+# get data stored in $OUPUT using input redirection
+name=$(<$OUTPUT)
+}
+
+new_instance(){
+
+
+COUNT=$(expr  ${#SELECT_LIST[@]} / 2)
+
+
+echo "0" | dialog --gauge "Please wait" 10 70 0
+
+echo "10" | dialog --gauge "Initialisation terraform ..." 10 70 0
+
+{make init} &> /dev/null
+
+echo "30" | dialog --gauge "Plannificaton terraform" 10 70 0
+
+{
+make plan<< EOF 
+$COUNT
+EOF
+} &> /dev/null
+
+echo "50" | dialog --gauge "Creation of instance ..." 10 70 0
+
+{
+make apply<< EOF
+$COUNT
+EOF
+} &> /dev/null
+
+echo "75" | dialog --gauge "Connection to instance ..." 10 70 0
+
+deploying=$(diff instances_deployed instance_ips | grep ">"|cut -c 3-)
+
+for ip in $deploying
+do
+sh go $ip<<EOF
+$(cat deploy_emqx)
+EOF
+
+if ping -c 1 "$ip:18083" #&> /dev/null
+then
+	echo $ip >> instace_deployed 
+else
+ 	echo "error" 
+fi
+
+done
+}
+list_instances(){
+	result=$(dialog --clear --title "$OUTPUT" --cancel-label "Quit" --menu "Please select instance: " 40 60 2 "${SELECT_LIST[@]}" 2>&1 1>/dev/tty) 
+	    
+	case $result in
+		0) new_instance ;;
+		*) instance;;
+		"") ;;
+	    esac
+	clear # clear after user pressed Cancel
+}
+
+
+if [[ ! -f "teamname.txt" ]]
+then
+	instances_name
+fi
+
+INSTANCE_NAME=$(cat "teamname.txt")
+result=0
+while [[ "$result" != "" ]]
+do
+	INSTANCE_LIST=($(scw instance server list | grep "$INSTANCE_NAME"| awk  '{print $2}' )) 
+	SELECT_LIST[0]=0
+	SELECT_LIST[1]="Create new instance"
+
+	i=2
+	j=1
+
+	for s in ${INSTANCE_LIST[@]}
+	do
+		SELECT_LIST[ $i ]=$j
+		(( j++ ))
+		SELECT_LIST[ ($i + 1) ]=$s
+		(( i=($i+2) ))
+	done
+	list_instances
+done

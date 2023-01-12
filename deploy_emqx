@@ -1,0 +1,22 @@
+#!/bin/bash
+
+sudo apt update
+sudo apt-get install build-essential << EOF
+y
+EOF
+
+git clone https://github.com/Redart71/dailyBear.git
+
+cd dailyBear
+
+bash docker-i.sh << EOF
+y
+EOF
+
+bash docker-i.sh << EOF
+y
+EOF
+
+bash emqx-i.sh
+
+exit
