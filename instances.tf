@@ -18,15 +18,13 @@ resource "scaleway_instance_server" "emqx" {
 
   ip_id = scaleway_instance_ip.public_ips[count.index].id
 
-  #additional_volume_ids = [scaleway_instance_volume.data.id]
 
   root_volume {
   	size_in_gb = 20
   }
 
   security_group_id = scaleway_instance_security_group.sg-www.id
-
-
+  
 }
 
 

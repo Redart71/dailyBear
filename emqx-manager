@@ -1,25 +1,15 @@
 #!/bin/bash
 
-rm "teamname.txt"
 
 instances_name(){
 
-OUTPUT="teamname.txt"
-
-
-# create empty file
->$OUTPUT
 
 # show an inputbox
-dialog --title "Starting EMQX Manager" \
+name=$(dialog --title "Starting EMQX Manager" \
 --backtitle "Initialization EMQX Manager" \
---inputbox "Enter instances' name " $OUTPUT 8 60 2>$OUTPUT
+--inputbox "Enter instances' name " 8 60 $(cat "teamname.txt") 2>&1 1>/dev/tty)
 
-# get respose
-respose=$?
-
-# get data stored in $OUPUT using input redirection
-name=$(<$OUTPUT)
+echo $name > teamname.txt
 }
 
 new_instance(){
@@ -58,9 +48,10 @@ for ip in $deploying
 do
 bash go $ip<<EOF
 $(cat deploy_emqx)
+exit
 EOF
 
-echo "95" | dialog --gauge "Testing Instances ..." 10 70 0
+echo "75" | dialog --gauge "Testing Instance ..." 10 70 0
 NMAP=$(nmap -p 18083 $ip -Pn)
 
 if [[ $NMAP == *"Host is up"* ]] 
@@ -73,7 +64,6 @@ fi
 done
 
 echo "100" | dialog --gauge "Instance EMQX created" 10 70 0
-
 }
 
 open_browser(){
@@ -113,10 +103,7 @@ list_instances(){
 }
 
 
-if [[ ! -f "teamname.txt" ]]
-then
-	instances_name
-fi
+instances_name
 
 INSTANCE_NAME=$(cat "teamname.txt")
 result=0

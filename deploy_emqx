@@ -1,20 +1,17 @@
 #!/bin/bash
 
 sudo apt update
-sudo apt-get git 
+sudo apt install git 
 
 git clone https://github.com/Redart71/dailyBear.git
 
 cd dailyBear
 
-bash docker-i.sh << EOF
+sudo ./install-docker  << EOF
+y
+y
 y
 EOF
 
-bash docker-i.sh << EOF
-y
-EOF
+sudo ./install-emqx
 
-bash emqx-i.sh
-
-exit

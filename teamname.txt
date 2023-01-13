@@ -1,5 +1,1 @@
-
-Expected a number for token 2 of --inputbox.
-Use --help to list options.
-
-
+daily
