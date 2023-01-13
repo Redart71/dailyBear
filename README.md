@@ -185,6 +185,10 @@
 
 Afin de simplifier la création d'instance, nous avons opter pour l'utilisation de boite dialogue avec des choix et des inputs. 
 
+Pour commencer il faut pull la branche finale du git ``git clone --branch final https://github.com/Redart71/dailyBear.git``.
+
+Puis aller dans le dossier dailyBear ``cd dailyBear``
+
 Pour lancer l'interface grapgique il faur éxecuter le fichier ``./emqx-manager`` .
 
 Lors du lancement de celui-ci , la première boite de dialogue demande à l'utilisateur de renter le nom qui va être utiliser pour créer les instances. 
