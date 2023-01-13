@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 rm "teamname.txt"
 
 instances_name(){
@@ -14,7 +13,7 @@ OUTPUT="teamname.txt"
 # show an inputbox
 dialog --title "Starting EMQX Manager" \
 --backtitle "Initialization EMQX Manager" \
---inputbox "Enter instances' name " 8 60 2>$OUTPUT
+--inputbox "Enter instances' name " $OUTPUT 8 60 2>$OUTPUT
 
 # get respose
 respose=$?
@@ -51,32 +50,64 @@ $COUNT
 EOF
 } &> /dev/null
 
-echo "75" | dialog --gauge "Connection to instance ..." 10 70 0
+echo "75" | dialog --gauge "Install EMQX ...( can take a while )" 10 70 0
 
 deploying=$(diff instances_deployed instance_ips | grep ">"|cut -c 3-)
 
 for ip in $deploying
 do
-sh go $ip<<EOF
+bash go $ip<<EOF
 $(cat deploy_emqx)
 EOF
 
-if ping -c 1 "$ip:18083" #&> /dev/null
+echo "95" | dialog --gauge "Testing Instances ..." 10 70 0
+NMAP=$(nmap -p 18083 $ip -Pn)
+
+if [[ $NMAP == *"Host is up"* ]] 
 then
-	echo $ip >> instace_deployed 
+	echo $ip >> instances_deployed 
 else
  	echo "error" 
 fi
 
 done
+
+echo "100" | dialog --gauge "Instance EMQX created" 10 70 0
+
 }
+
+open_browser(){
+	{
+	url="http://$(echo $(sed -n "$result"p"" instance_ips) ):18083"
+	firefox -new-tab $url
+}&> /dev/null 
+
+}
+
+
+instance(){
+option=0
+
+while [[ "$option" != "" ]]
+do
+	OPTION_LIST[0]=0
+	OPTION_LIST[1]="Open in browser"
+
+	option=$(dialog --clear --title "$OUTPUT" --cancel-label "Return" --menu "Please select an option: " 40 60 2 "${OPTION_LIST[@]}" 2>&1 1>/dev/tty) 
+	case $option in
+		0) open_browser ;;
+		"") ;;
+	esac
+done
+}
+
 list_instances(){
 	result=$(dialog --clear --title "$OUTPUT" --cancel-label "Quit" --menu "Please select instance: " 40 60 2 "${SELECT_LIST[@]}" 2>&1 1>/dev/tty) 
 	    
 	case $result in
 		0) new_instance ;;
+		"");;
 		*) instance;;
-		"") ;;
 	    esac
 	clear # clear after user pressed Cancel
 }
@@ -89,21 +120,24 @@ fi
 
 INSTANCE_NAME=$(cat "teamname.txt")
 result=0
+
 while [[ "$result" != "" ]]
 do
 	INSTANCE_LIST=($(scw instance server list | grep "$INSTANCE_NAME"| awk  '{print $2}' )) 
-	SELECT_LIST[0]=0
-	SELECT_LIST[1]="Create new instance"
 
-	i=2
-	j=1
+	i=2+${#INSTANCE_LIST[@]}*2
+	j=${#INSTANCE_LIST[@]}
 
 	for s in ${INSTANCE_LIST[@]}
 	do
 		SELECT_LIST[ $i ]=$j
-		(( j++ ))
+		(( j-- ))
 		SELECT_LIST[ ($i + 1) ]=$s
-		(( i=($i+2) ))
+		(( i=($i-2) ))
 	done
+
+	SELECT_LIST[0]=0
+	SELECT_LIST[1]="Create new instance"
+	
 	list_instances
 done

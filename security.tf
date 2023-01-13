@@ -27,8 +27,8 @@ resource "scaleway_instance_security_group" "sg-www" {
     port   = "80"
   }
 
-  inbound_rule {
-    action = "accept"
-    port   = "443"
-  }
+ inbound_rule {
+	action = "accept"
+	port= "18083"
+	}
 }

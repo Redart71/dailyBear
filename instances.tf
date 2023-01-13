@@ -26,10 +26,6 @@ resource "scaleway_instance_server" "emqx" {
 
   security_group_id = scaleway_instance_security_group.sg-www.id
 
-  user_data = {
-    name        = "initscript"
-    cloud-init = file("${path.module}/deploy_emqx") 
-}
 
 }
 
