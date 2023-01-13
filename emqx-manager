@@ -1,88 +1,117 @@
 #!/bin/bash
 
-
+# function for input instances name
 instances_name(){
 
 
-# show an inputbox
+# show an inputbox for instances name
 name=$(dialog --title "Starting EMQX Manager" \
 --backtitle "Initialization EMQX Manager" \
 --inputbox "Enter instances' name " 8 60 $(cat "teamname.txt") 2>&1 1>/dev/tty)
 
+# save name in teamname
 echo $name > teamname.txt
 }
 
+#function for create new instance
 new_instance(){
 
 
+# define the number of the new instance
 COUNT=$(expr  ${#SELECT_LIST[@]} / 2)
 
 
+# display gauge 0%
 echo "0" | dialog --gauge "Please wait" 10 70 0
 
+# display gauge 10%
 echo "10" | dialog --gauge "Initialisation terraform ..." 10 70 0
 
+# terraform initialization
 {make init} &> /dev/null
 
+# display gauge 30%
 echo "30" | dialog --gauge "Plannificaton terraform" 10 70 0
 
+# terraform plannification 
 {
 make plan<< EOF 
 $COUNT
 EOF
 } &> /dev/null
 
+# display gauge 50%
 echo "50" | dialog --gauge "Creation of instance ..." 10 70 0
 
+# terraform application
 {
 make apply<< EOF
 $COUNT
 EOF
 } &> /dev/null
 
+# display gauge 75%
 echo "75" | dialog --gauge "Install EMQX ...( can take a while )" 10 70 0
 
+# define ips need to be deployed
 deploying=$(diff instances_deployed instance_ips | grep ">"|cut -c 3-)
 
+# loop on ips that need to be deployed
 for ip in $deploying
 do
+
+# run script go for connect in ssh to the instance with this ip
+# run script deploy_emqx for install emqx on the instance
 bash go $ip<<EOF
 $(cat deploy_emqx)
 exit
 EOF
 
+# display gauge 75% 
 echo "75" | dialog --gauge "Testing Instance ..." 10 70 0
 NMAP=$(nmap -p 18083 $ip -Pn)
 
+# check if the port 18083 ( emqx ) is open 
 if [[ $NMAP == *"Host is up"* ]] 
 then
+	# if port is open add ip into instances deployed list
 	echo $ip >> instances_deployed 
 else
+	# else return error
  	echo "error" 
 fi
 
 done
 
+# display gauge 100 finished 
 echo "100" | dialog --gauge "Instance EMQX created" 10 70 0
 }
 
+# function to open dashboard emqx of the chosen instance
 open_browser(){
 	{
+	# define url to open
 	url="http://$(echo $(sed -n "$result"p"" instance_ips) ):18083"
+	# open with firefox the url in a new tab
 	firefox -new-tab $url
 }&> /dev/null 
 
 }
 
-
+# function for display the option menu of chosen instance
 instance(){
+
+# define option to 0
 option=0
 
+# ask for a option until the choose is empty who corresponding to return button
 while [[ "$option" != "" ]]
 do
+	# set option open in browwer
 	OPTION_LIST[0]=0
 	OPTION_LIST[1]="Open in browser"
 
+	# ask user for the option 
 	option=$(dialog --clear --title "$OUTPUT" --cancel-label "Return" --menu "Please select an option: " 40 60 2 "${OPTION_LIST[@]}" 2>&1 1>/dev/tty) 
 	case $option in
 		0) open_browser ;;
@@ -91,7 +120,9 @@ do
 done
 }
 
+# function for display list of current instances in the name group
 list_instances(){
+	# ask user to choose a instance or creating one
 	result=$(dialog --clear --title "$OUTPUT" --cancel-label "Quit" --menu "Please select instance: " 40 60 2 "${SELECT_LIST[@]}" 2>&1 1>/dev/tty) 
 	    
 	case $result in
@@ -102,19 +133,26 @@ list_instances(){
 	clear # clear after user pressed Cancel
 }
 
-
+# call function to determine instance name
 instances_name
 
+# get instance name with teamname file
 INSTANCE_NAME=$(cat "teamname.txt")
+
+# define result to 0 corresponding to the choose of user in the first menu
 result=0
 
+# ask the user to choose in the menu until this value is "" corresponding to Quit button
 while [[ "$result" != "" ]]
 do
+	# get instances list name with scw 
 	INSTANCE_LIST=($(scw instance server list | grep "$INSTANCE_NAME"| awk  '{print $2}' )) 
 
+	# define varaible for loop depending on length of instance list
 	i=2+${#INSTANCE_LIST[@]}*2
 	j=${#INSTANCE_LIST[@]}
 
+	# looop on the instance list 
 	for s in ${INSTANCE_LIST[@]}
 	do
 		SELECT_LIST[ $i ]=$j
@@ -123,8 +161,10 @@ do
 		(( i=($i-2) ))
 	done
 
+	# define default option : creating instance
 	SELECT_LIST[0]=0
 	SELECT_LIST[1]="Create new instance"
 	
+	# display list of instances
 	list_instances
 done

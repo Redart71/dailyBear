@@ -1,4 +1,5 @@
 
+
 variable "instance_count" {}
 
 resource "scaleway_instance_ip" "public_ips" {

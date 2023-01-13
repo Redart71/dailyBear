@@ -1,17 +1,24 @@
 #!/bin/bash
 
+# update package
 sudo apt update
+
+# get package git
 sudo apt install git 
 
+# clone script to install docker and emqx
 git clone https://github.com/Redart71/dailyBear.git
 
+# change directory to repository directory
 cd dailyBear
 
+# run installation of docker 
 sudo ./install-docker  << EOF
 y
 y
 y
 EOF
 
+# run installation of emqx
 sudo ./install-emqx
 

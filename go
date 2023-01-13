@@ -30,7 +30,7 @@ fi
 echo "Instance public ip:" ${ip}
 
 #ssh -i ../ssh-keys/id_rsa_tfkeypair1 \
-ssh -i ~/.ssh/id_rsa \
+ssh -i ~/.ssh/id_rsa_jp \
     -o StrictHostKeyChecking=no \
     -o UserKnownHostsFile=/dev/null \
     root@${ip}
