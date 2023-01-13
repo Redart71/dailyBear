@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# uninstall all docker version
+apt-get remove docker docker-engine docker.io containerd runc
+
+# update packages
+apt-get update
+
+# dowload required packages for docker
+apt-get install ca-certificates curl gnupg lsb-release
+
+# create directory keyrings
+mkdir -p /etc/apt/keyrings
+
+#get docker repository
+[ ! -f /etc/apt/keyrings/docker.gpg ] && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg || echo "Already docker image"
+
+#set docker repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# set a version to get a common version
+VERSION_STRING=5:20.10.13~3-0~ubuntu-jammy
+
+# set a loop variable
+loop=0
+
+# loop until specific version of docker installed 
+while [ ! docker ] || [[ "$loop" == "3" ]]
+do
+        apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin
+        ((loop++))
+done
+
+#installation result
+if [[ "$loop" == "3" ]]
+then
+        echo "Docker installation failed"
+else
+        echo "Docker installation successed"
+fi
+
