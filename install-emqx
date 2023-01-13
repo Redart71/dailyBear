@@ -1,12 +1,13 @@
 #!/bin/bash
 
-
+# fix emqx version
 VERSION_EMQX=5.0.9
 
+
+# get emqx docker image
 docker pull emqx/emqx:$VERSION_EMQX
-#get docker image
+
+
+# running emqx docker image
 docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8883:8883 -p 8084:8084 -p 18083:18083 emqx/emqx:$VERSION_EMQX
-#excecution emqx docker image
-
-
 
