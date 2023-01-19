@@ -3,6 +3,8 @@
 # fix emqx version
 VERSION_EMQX=5.0.9
 
+#start system docker
+systemctl start docker
 
 # get emqx docker image
 docker pull emqx/emqx:$VERSION_EMQX
