@@ -219,7 +219,7 @@ Docker est désormais installé, nous passons donc au container EMQX.
 
 Pour commencer, nous allons récupére l'image d'EMQX comme pour docker avec une version spécifique  ``5.0.9``.
 
-L'image récupéré, il ne reste plus qu'a démarrer un container avec la commande ``docker run ``sur le port 18083 qui est le prot de définir pour les serveur EMQX.
+L'image récupéré, il ne reste plus qu'a démarrer un container avec la commande ``docker run ``sur le port 18083 qui est le port de définir pour les serveur EMQX.
 	
 **Notre container EMQX est désormais en ligne .**
 
