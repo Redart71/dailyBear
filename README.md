@@ -194,11 +194,6 @@ Lors du lancement de celui-ci , on demande à l'utilisateur de renter le nom qui
 On commence par utiliser la commande ``make init ``, pour initialiser terraform. Puis ``make plan``, pour préparer les resources pour l'instance et on finit par ``make apply`` pour créer l'instance.
 
 **Notre instance est à ce moment créée 👍**
-
-On obtient les ip des sites web dans le terminal.
-
-![image](https://user-images.githubusercontent.com/92815115/213427912-2a1c8510-536e-4226-a42e-28d7636b5a18.png)
-
 ---
 
 ## 4. Processus d'installation de EMQX
@@ -225,11 +220,9 @@ L'image récupéré, il ne reste plus qu'a démarrer un container avec la comman
 
 ## 5. Accéder au dashboard EMQX 
 
-Une fois, l'installation de tous les éléments faits. Nous somme ramener sur la liste des instances. 
+On obtient les ip des sites web dans le terminal sur lesquelles on peut cliquer pour y accéder.
 
-On peut maintenant sélectionner l'instance précédement créée, nous arrivons de ce fait sur un nouveau menu . 
-
-Le menu de l'instance sélectionne a une unique option qui est ``open in browser`` qui ouvrira dans le navigateur firefox la page du dashboard EMQX correspondant à l'ip de l'instant sur le port 18083.
+![image](https://user-images.githubusercontent.com/92815115/213427912-2a1c8510-536e-4226-a42e-28d7636b5a18.png)
 
 ![Pasted image 20230113195348](https://user-images.githubusercontent.com/92815115/212397359-9666c757-25e9-4546-84c5-28c84263adb6.png)
 
