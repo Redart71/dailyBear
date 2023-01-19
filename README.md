@@ -183,31 +183,15 @@
 ---
 ## 3. Processus de création d'instance
 
-Afin de simplifier la création d'instance, nous avons opter pour l'utilisation de boite dialogue avec des choix et des inputs. 
-
 Pour commencer il faut pull la branche finale du git ``git clone --branch final_version https://github.com/Redart71/dailyBear.git``.
 
 Puis aller dans le dossier dailyBear ``cd dailyBear``
 
-Pour lancer l'interface grapgique il faur éxecuter le fichier ``./emqx-manager`` .
+Pour lancer l'interface grapgique il faur éxecuter le fichier ``./deploy-emqx`` .
 
-Lors du lancement de celui-ci , la première boite de dialogue demande à l'utilisateur de renter le nom qui va être utiliser pour créer les instances. 
-
-![Pasted image 20230113194505](https://user-images.githubusercontent.com/92815115/212397470-45baeef5-82f5-474d-84c4-af741724b301.png)
-
-De cette facon en relance l'interface, on peut décider de changer de nom et donc de créer un autre groupe d'instance avec un autre nom.
-
-Après avoir choisi le nom du groupe d'instance, l'utilisateur arrivera sur le menu ci-dessous.
-
-Lors de sa première utilisation, il n'aura que le choix de créer une instance ( ou bien de quitter si il le souhaite)
-
-![Pasted image 20230113194528](https://user-images.githubusercontent.com/92815115/212397459-a83e7878-71e3-46da-a082-d5f5648f6737.png)
-
-En sélectionannt ``create new instance`` , la création d'instance est initialisé.
+Lors du lancement de celui-ci , on demande à l'utilisateur de renter le nom qui va être utiliser pour créer les instances. 
 
 On commence par utiliser la commande ``make init ``, pour initialiser terraform. Puis ``make plan``, pour préparer les resources pour l'instance et on finit par ``make apply`` pour créer l'instance.
-
-![Pasted image 20230113194541](https://user-images.githubusercontent.com/92815115/212397432-ba32f9b2-fb17-4c07-b3f8-319ad698fc17.png)
 
 **Notre instance est à ce moment créée 👍**
 
@@ -215,13 +199,7 @@ On commence par utiliser la commande ``make init ``, pour initialiser terraform.
 
 ## 4. Processus d'installation de EMQX
 
-Une fois l'instance créée, il faut maintenant installer emqx sur cette instance. *
-
-![Pasted image 20230113194654](https://user-images.githubusercontent.com/92815115/212397416-dc8286f4-204d-4f71-a869-b4073f4bc14d.png)
-
-On récupére donc son ip et on s'y connecte via ssh grâce à la commande ``./go`` suivi de l'ip .
-
-Une fois connecté, le script ``deploy_emqx`` est envoyé à la VM grâce à la fonction ``EOF ``.
+Une fois créé , le script ``init-instance`` est éxécute
 
 Il commence par mettre à jour et installer les packages nécessaires ( tels que git ).
 
@@ -238,10 +216,6 @@ Docker est désormais installé, nous passons donc au container EMQX.
 Pour commencer, nous allons récupére l'image d'EMQX comme pour docker avec une version spécifique  ``5.0.9``.
 
 L'image récupéré, il ne reste plus qu'a démarrer un container avec la commande ``docker run ``sur le port 18083 qui est le prot de définir pour les serveur EMQX.
-
-On viens pour par tester le port 18083 sur l'ip de notre instance pour s'assurer de la réussite du script.
-
-![Pasted image 20230113194813](https://user-images.githubusercontent.com/92815115/212397390-7f118460-257c-4414-bcfd-63b109129714.png)
 	
 **Notre container EMQX est désormais en ligne .**
 
