@@ -195,11 +195,15 @@ On commence par utiliser la commande ``make init ``, pour initialiser terraform.
 
 **Notre instance est à ce moment créée 👍**
 
+On obtient les ip des sites web dans le terminal.
+
+![image](https://user-images.githubusercontent.com/92815115/213427912-2a1c8510-536e-4226-a42e-28d7636b5a18.png)
+
 ---
 
 ## 4. Processus d'installation de EMQX
 
-Une fois créé , le script ``init-instance`` est éxécute
+Une fois l'instance créé , le script ``init-instance`` est éxécute grâce à user_data
 
 Il commence par mettre à jour et installer les packages nécessaires ( tels que git ).
 
