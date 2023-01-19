@@ -22,7 +22,8 @@ VERSION_STRING=5:20.10.13~3-0~ubuntu-jammy
 # set a loop variable
 loop=0
 
-sudo apt-get -y install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin
+snap install docker
+#sudo apt-get -y install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin
 
 #installation result
 if [[ docker ]]
