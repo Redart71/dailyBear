@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-apt-get -y update
+sudo apt-get -y update
 
 # dowload required packages for docker
-apt-get -y install ca-certificates curl gnupg lsb-release
+sudo apt-get -y install ca-certificates curl gnupg lsb-release
 
 # create directory keyrings
 mkdir -p /etc/apt/keyrings
@@ -22,21 +22,13 @@ VERSION_STRING=5:20.10.13~3-0~ubuntu-jammy
 # set a loop variable
 loop=0
 
-# loop until specific version of docker installed 
-#while [ ! docker ] || [[ "$loop" == "3" ]]
-#do
-
-apt-get -y install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin
-apt-get -y install docker-ce docker-ce-cli containerd.io docker-compose-plugin:
-#((loop++))
-
-#done
+sudo apt-get -y install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin
 
 #installation result
-if [[ "$loop" == "3" ]]
+if [[ docker ]]
 then
-        echo "Docker installation failed"
-else
         echo "Docker installation successed"
+else
+        echo "Docker installation failed"
 fi
 
