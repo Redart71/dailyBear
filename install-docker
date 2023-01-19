@@ -4,9 +4,7 @@
 apt-get update
 
 # dowload required packages for docker
-apt-get install ca-certificates curl gnupg lsb-release << EOF
-y
-EOF
+apt-get install ca-certificates curl gnupg lsb-release
 
 # create directory keyrings
 mkdir -p /etc/apt/keyrings
@@ -29,9 +27,7 @@ loop=0
 while [ ! docker ] || [[ "$loop" == "3" ]]
 do
 
-apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin << EOF
-y
-EOF
+apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin
 ((loop++))
 
 done
