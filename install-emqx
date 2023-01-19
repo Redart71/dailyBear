@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # fix emqx version
 VERSION_EMQX=5.0.9
