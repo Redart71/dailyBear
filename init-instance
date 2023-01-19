@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+apt update
+
+apt -y install git
+
+# mettez l'url de VOTRE dépôt ici ...
+git clone https://github.com/Redart71/dailyBear.git
+
+# change directory to repository directory
+cd dailyBear
+
+# run installation of docke
+bash install-docker 
+# run installation of emqx
+bash install-emqx
+
+touch /root/cloud-init-ok
+touch /tmp/cloud-init-ok

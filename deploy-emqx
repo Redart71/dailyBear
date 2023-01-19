@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+echo "Your team's name please :"
+read teamname
+
+echo $teamname > teamname.txt
+
+make init
+make plan 
+make apply
+
