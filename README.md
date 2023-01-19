@@ -185,7 +185,7 @@
 
 Afin de simplifier la création d'instance, nous avons opter pour l'utilisation de boite dialogue avec des choix et des inputs. 
 
-Pour commencer il faut pull la branche finale du git ``git clone --branch final https://github.com/Redart71/dailyBear.git``.
+Pour commencer il faut pull la branche finale du git ``git clone --branch final_version https://github.com/Redart71/dailyBear.git``.
 
 Puis aller dans le dossier dailyBear ``cd dailyBear``
 
