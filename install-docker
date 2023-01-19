@@ -24,13 +24,13 @@ VERSION_STRING=5:20.10.13~3-0~ubuntu-jammy
 loop=0
 
 # loop until specific version of docker installed 
-while [ ! docker ] || [[ "$loop" == "3" ]]
-do
+#while [ ! docker ] || [[ "$loop" == "3" ]]
+#do
 
 apt-get install docker-ce=$VERSION_STRING docker-ce-cli=$VERSION_STRING containerd.io docker-compose-plugin
-((loop++))
+#((loop++))
 
-done
+#done
 
 #installation result
 if [[ "$loop" == "3" ]]
